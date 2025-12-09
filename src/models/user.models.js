@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema(
     avatar:{
     type:String,// cloundinary URL
     required:true,
-    trim:true,
    },
    coverImage:{
     type:String, // cloundinary URL
@@ -49,11 +48,6 @@ const userSchema = new mongoose.Schema(
    refreshToken:{
     type:String,
    },
-
-
-
-   
-
 },{timestamps:true})
 
 
@@ -78,20 +72,20 @@ userSchema.methods.isPasswordCorrect = async function (password){
 
 /*  ACCESS TOKEN */
 
-userSchema.methods.generateAccessToken = async function (){
-  return jwt.sign(
+userSchema.methods.generateAccessToken = async function(){
+  jwt(
     {
-      _id:this._id,
-      email:this.email,
-      fullName:this.fullName,
-      username:this.username,
+    _id:this._id,
+    username:this.username,
+    email:this.email,
+    fullName:this.fullName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY
-    }
+      expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+    },
   )
-}
+},
 
 /*  REFRESH TOKEN */
 userSchema.methods.generateRefreshToken = async function(){
