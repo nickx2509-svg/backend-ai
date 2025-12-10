@@ -22,9 +22,13 @@ app.use(express.static(path.join(process.cwd(),"public")))
 
 app.use(cookieParser())
 
-app.get('/',(req,resp)=>{
-  resp.status(200).send('nick')
-})
+
+//import routes
+import router from "./routes/user.routes.js"
+
+app.use('/api/v1/users',router)
+
+
 
 export { app  }
 
