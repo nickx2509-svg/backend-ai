@@ -5,14 +5,16 @@ import jwt from "jsonwebtoken"
 
 export const verifyJWT = asynceHandler(async(req,_,next) => {
   try {
-    const token = req.cookies?.AccessToken || req.header("Authoriatzation")?.replace("Bearer ","")
+    const token = req.cookies?.accessToken
+  || req.header("Authorization")?.replace("Bearer ", "");
+
   
     if (!token) {
       throw new ApiError(401,"unAuthorised request")
     }
     const decodeToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
   
-    const user = await User.findByIn(decodeToken?._id).select("-password -refreshToken")
+    const user = await User.findById(decodeToken?._id).select("-password -refreshToken")
   
     if(!user){
       // TODO: discuss about frontent

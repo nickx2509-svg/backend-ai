@@ -1,3 +1,4 @@
+// app.js
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -11,20 +12,13 @@ app.use(cors({
   credentials: true,
 }));
 
-// ✅ DO NOT duplicate json middleware
-// ✅ Only once
-app.use(express.json({ limit }));
-
-// ✅ For form fields (NOT files)
-app.use(express.urlencoded({
-  extended: true,
-  limit,
-}));
-
+app.use(express.json({ limit }));  // REQUIRED for req.body
+app.use(express.urlencoded({ extended: true, limit })); 
 app.use(express.static(path.join(process.cwd(), "public")));
+
 app.use(cookieParser());
 
-// ✅ ROUTES (multer is inside routes, PERFECT)
+// ROUTES
 import router from "./routes/user.routes.js";
 app.use("/api/v1/users", router);
 
